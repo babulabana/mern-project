@@ -5,6 +5,9 @@ import './App.css'
 import AdminLogin from './components/admin/AdminLogin'
 import {Route,Routes,Link} from 'react-router-dom'
 import AdminHome from './components/admin/AdminHome'
+// import Adminhome from './components/admin/Adminhome'
+import AddEvent from './components/admin/AddEvent'
+import ShowEvents from './components/ShowEvents'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,9 +16,13 @@ function App() {
   <>
   <div>
       {/* <Link to="/adminlogin">Admin Login</Link> */}
+      <Link to="/adminlogin">Admin Login</Link>
+      <Link to="/showevents">Show Events</Link>
       <Routes>
         <Route path="/" element={<AdminLogin></AdminLogin>}></Route>
+        <Route path ="/Addevent" element={<AddEvent></AddEvent>}></Route>
         <Route path="/adminlogin" element={<AdminLogin></AdminLogin>}></Route>
+        <Route path="/showevents" element={<ShowEvents></ShowEvents>}  ></Route>
         <Route path="/adminhome" element={<AdminHome></AdminHome>}></Route>
       </Routes> 
     </div>

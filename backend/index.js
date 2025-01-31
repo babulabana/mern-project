@@ -10,8 +10,7 @@ const upload = require("./forMulter")
 let corsOptions = {
     origin : ['http://localhost:8080',
     'http://localhost:5173'],
- }
- 
+ } 
  app.use(cors(corsOptions))
  app.use("/uploads",express.static(__dirname + '/uploads'));
 

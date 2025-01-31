@@ -1,14 +1,20 @@
 import React, { useRef, useState } from 'react'
 import {useNavigate} from "react-router"
+import { useSelector,useDispatch } from 'react-redux'
+import { setadmin } from '../../slices/adminSlice'
 export default function AdminLogin() {
+    let dispatch = useDispatch()
     let navigate = useNavigate()
-    let nameref = useRef("")
-    let pwdref = useRef("")
+    let nameref = useRef()
+    let pwdref = useRef()
     const [msg,setmsg] = useState("");
-    let loginFun=()=>
+
+let loginFun=()=>
     {
         if(nameref.current.value=="admin" && pwdref.current.value=="123")
         {
+            console.log(setadmin)
+            dispatch(setadmin({adminname:'Admin',islogin:true}))
             navigate("/adminhome")
         }
         else
