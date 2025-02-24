@@ -1,6 +1,7 @@
 // const event = require("../model/eventModel")
 const eventModel = require("../model/eventModel")
 exports.insertevent = async(t,imgurl)=>{
+
     let event = new eventModel(
         {
             eventname:t.eventname,
@@ -15,7 +16,7 @@ exports.insertevent = async(t,imgurl)=>{
    )
 
    let msg = "event not added";
-   event.save()
+   await event.save()
    .then(async ()=>{
     let data = await eventModel.find();
     msg ={"message":"event added","eventdata":data}
@@ -24,28 +25,61 @@ exports.insertevent = async(t,imgurl)=>{
 
 
 }
-exports.deleteevent = async (name)=>
+exports.deleteevent = async (id)=>
     {
-        let t = {eventname:name}
+        // let t = {eventname:name}
         let msg = "event not delted"
     
-        await eventModel.deleteOne(t).
-        then(()=>msg = "event deleted ")
+        await eventModel.findOneAndDelete({_id: id}).
+        then((d)=>{
+            // console.log(d)
+            msg = "event deleted "
+        })
         return msg ;
     
     }
-    exports.updateevent = async (name)=>
-    {
-        let t  = {eventname:name}
-        let s = {status:'complete'}
-    
-        let msg = "event status not updated";
-        await eventModel.updateOne(t,{$set:s})
-        .then(()=>msg = "record updated")
-        return msg
-    }
+    exports.updateevent =async (t)=>
+        {console.log("in update")
+        console.log("this is  in controller ")
+            console.log("below is t")
+            console.log(t)
+            console.log("above is t")
+            let eventdata = { eventname:t.eventname,
+                    place :t.place,
+                    date:t.date,
+                    time:t.time,
+                    maxlimit:t.maxlimit,    
+                     category:t.category,
+                     }
+            
+          let msg ="event not updated";
+        await eventModel.updateOne({_id:t.id},{$set:eventdata})
+            .then(async ()=>
+            {    let data = await eventModel.find();
+               
+                msg={'message':"event updated",'eventdata':data}
+            })
+            return msg    
+        }
     exports.getallevents =async ()=>
     {
     let data = await eventModel.find();
+    return data;
+    }
+
+    
+exports.getallevents =async ()=>
+    {
+    let data = await eventModel.find();
+    return data;
+    }
+    exports.getEventsbyCategory = async(categoryname)=>
+    {
+        let data = await eventModel.find({category:categoryname});
+    return data;
+    }
+    exports.getEventById =async(eid)=>
+    {
+        let data = await eventModel.find({_id:eid});
     return data;
     }

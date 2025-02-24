@@ -9,7 +9,7 @@ const upload = require("./forMulter")
 // enabling CORS for some specific origins only.
 let corsOptions = {
     origin : ['http://localhost:8080',
-    'http://localhost:5173'],
+    'http://localhost:5175'],
  } 
  app.use(cors(corsOptions))
  app.use("/uploads",express.static(__dirname + '/uploads'));

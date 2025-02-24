@@ -1,49 +1,48 @@
-import axios from 'axios'
-import React, { useState,useEffect,useRef } from 'react'
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router';
+import { API_URL } from '../Config';
+import axios from 'axios';
 
-import { API_URL } from '../Config'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
-const ShowEvents = () => {
-    
-  
-  const [eventdata,setEventdata]=useState([])
-  let dataevent = axios.get(API_URL+"event")
-  .then((d)=>setEventdata(d.data))
-  
-  const [eventsUI,seteventUI]=useState([]);
-  useEffect(()=>
-  {
-   
-      selectEvents()
-   
-  },[eventdata])
+export default function ShowEvents() {
+  let params = useParams();
+  let cname = params.eventname;
+  const [eventdata, setEventdata] = useState([]);
+  const [eventUi, setEventUi] = useState([]);
 
+  useEffect(() => {
+    (async () => {
+      await axios.get(API_URL + "event/"+cname)
+        .then((d) => {
+          console.log(d)
+          setEventdata(d.data);
+          let ui = d.data.map((event) => {
+            return (
+              <div key={event._id} className="bg-white rounded-lg shadow-lg overflow-hidden m-4 w-64">
+                <img
+                  className="w-full h-48 object-cover"
+                  src={API_URL + "uploads/" + event.imgpath}
+                  alt={event.eventname}
+                />
+                <div className="p-4">
+                  <h2 className="text-xl font-bold mb-2">{event.eventname}</h2>
+                  <p className="text-gray-600 mb-2">{event.place}</p>
+                  <p className="text-gray-500">{new Date(event.date).toLocaleDateString()}</p>
+                  <Link to={"/EventDetails/"+event._id}>Show Details</Link>
+                </div>
+              </div>
+            );
+          });
+          setEventUi(ui);
+        });
+    })();
+  }, []);
 
-    let selectEvents=()=>
-    {
-      let eventsUIMAP = eventdata.map((e)=>{
-        return <tr>
-           
-          <td>{e.eventname}</td>
-          <td>{e.place}</td>
-          <td>{e.date}</td>
-          <td>{e.time}</td>
-          <td>{e.maxlimit}</td>
-          <td>{e.category}</td>
-          <td><img height={100} width={100} 
-          src={API_URL+"uploads/"+e.imgpath}/></td>
-        </tr> 
-      })
-      seteventUI(eventsUIMAP)
-    }
- return (
-   <div>
-    <table border="1">
-  {eventsUI}
-</table>
-   </div>
- )
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold text-center mb-8">{cname}</h1>
+      <div className="flex flex-wrap justify-center">
+        {eventUi}
+      </div>
+    </div>
+  );
 }
-
-export default ShowEvents;
