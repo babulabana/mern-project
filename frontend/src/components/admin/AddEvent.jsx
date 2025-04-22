@@ -81,6 +81,7 @@ export default function AddEvent() {
       //  imgref.current.files[0]=""
       imgformref.current.src=""
     }
+    
 
     let add = async () => {    
       let headers = { headers: { 'Content-Type': 'multipart/form-data ' } };
